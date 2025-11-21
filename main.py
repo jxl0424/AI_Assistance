@@ -9,6 +9,7 @@ from continuous_listener import ContinuousListener
 from feedback_system import FeedbackSystem
 from llm_core import LLMCore
 from tts_engine import TextToSpeech
+from memory_manager import MemoryManager
 
 class JarvisAgent:
     def __init__(self, use_wake_word=True, feedback_system=None):
@@ -16,9 +17,10 @@ class JarvisAgent:
         self.feedback.print_banner("JARVIS - Agent Mode")
         
         self.feedback.print_status("Init Components...", "info")
+        self.memory_manager = MemoryManager() # SHARED MEMORY
         self.stt = SpeechToText()
-        self.llm = LLMCore()
-        self.executor = CommandExecutor()
+        self.llm = LLMCore(self.memory_manager)
+        self.executor = CommandExecutor(self.memory_manager)
         self.listener = ContinuousListener()
         self.tts = TextToSpeech()
         
@@ -63,6 +65,10 @@ class JarvisAgent:
             # with the actual data we found in the file.
             if intent.get("action") == "ask_finance":
                 response_text = result_message
+            
+            # If the action was to remember something, update the LLM context immediately
+            if intent.get("action") == "remember":
+                self.llm.update_memory_context()
             
             # Add execution result to LLM history so it remembers what happened
             self.llm.add_entry("system", f"Action executed. Result: {result_message}")

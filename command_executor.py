@@ -8,14 +8,16 @@ import psutil
 import time
 from apps_config import find_application_path, APPLICATIONS
 from finance_manager import FinanceManager
-from memory_manager import MemoryManager  # IMPORT MEMORY
+from memory_manager import MemoryManager
+from tools_manager import ToolsManager  # IMPORT TOOLS
 
 class CommandExecutor:
-    def __init__(self):
+    def __init__(self, memory_manager):
         """Initialize command executor"""
         self.running_processes = {}
         self.finance = FinanceManager()
-        self.memory = MemoryManager() # INIT MEMORY
+        self.memory = memory_manager
+        self.tools = ToolsManager() # INIT TOOLS
     
     def execute(self, intent):
         """
@@ -67,6 +69,15 @@ class CommandExecutor:
                 self.memory.add_memory(fact)
                 return {"success": True, "message": f"I'll remember that: {fact}"}
             return {"success": False, "message": "No fact provided to remember"}
+            
+        # NEW: Weather Handler
+        elif action == "weather":
+            city = intent.get("target", "Singapore") # Default to Singapore if no target
+            return {"success": True, "message": self.tools.get_weather(city)}
+            
+        # NEW: Smart Search Handler
+        elif action == "smart_search":
+            return {"success": True, "message": self.tools.search_web(query)}
             
         else:
             return {

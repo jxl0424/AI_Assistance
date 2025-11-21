@@ -38,3 +38,4 @@ dependencies:
     # Web functionality
     - requests
     - beautifulsoup4
+    - ddgs

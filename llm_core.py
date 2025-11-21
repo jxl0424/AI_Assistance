@@ -7,19 +7,21 @@ try:
 except ImportError:
     INSTALLED_APPS = ["chrome", "notepad", "calculator"] 
 
-from memory_manager import MemoryManager
-
 class LLMCore:
-    def __init__(self):
+    def __init__(self, memory_manager):
         self.client = OpenAI(
             base_url="http://localhost:11434/v1",
             api_key="ollama"
         )
         self.model = "llama3.2" 
-        self.memory_manager = MemoryManager()
+        self.memory_manager = memory_manager
         self.conversation_history = [
             {"role": "system", "content": self._get_system_prompt()}
         ]
+
+    def update_memory_context(self):
+        """Update the system prompt with latest memories"""
+        self.conversation_history[0] = {"role": "system", "content": self._get_system_prompt()}
 
     def _get_system_prompt(self):
         apps_str = ", ".join(INSTALLED_APPS)
@@ -49,14 +51,22 @@ class LLMCore:
         6. "remember": Store a fact about the user.
            - User: "My name is Brendan" or "I like coding"
            - Params: fact (string)
+           
+        7. "weather": Get weather.
+           - User: "Weather in Tokyo"
+           - Params: target (city name, default "Singapore")
+           
+        8. "smart_search": Search web for answer.
+           - User: "Who is the president of France?" or "Stock price of NVDA"
+           - Params: query (string)
         
-        7. "chat": General conversation.
+        9. "chat": General conversation.
         
         RESPONSE FORMAT:
         {{
             "response": "Spoken response to user",
             "intent": {{
-                "action": "open|system|search|track_expense|ask_finance|remember|chat",
+                "action": "open|system|search|track_expense|ask_finance|remember|weather|smart_search|chat",
                 "target": "val", "amount": 0, "currency": "$",
                 "category": "val", "description": "val", 
                 "timeframe": "today|month|all",
