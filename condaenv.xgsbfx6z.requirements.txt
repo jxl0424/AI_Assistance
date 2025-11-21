@@ -1,0 +1,14 @@
+openai
+SpeechRecognition
+faster-whisper
+sounddevice
+soundfile
+webrtcvad-wheels
+pvporcupine
+pyautogui
+screen-brightness-control
+pycaw
+comtypes
+psutil
+requests
+beautifulsoup4

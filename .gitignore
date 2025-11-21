@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*$py.class
+models/
+recordings/
+finance_tracker.csv
+.env
+.vscode/
