@@ -6,3 +6,6 @@ recordings/
 finance_tracker.csv
 .env
 .vscode/
+test_*.py
+test_output.txt
+reproduce_bug.py
