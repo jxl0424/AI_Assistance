@@ -7,13 +7,15 @@ import os
 import psutil
 import time
 from apps_config import find_application_path, APPLICATIONS
-from finance_manager import FinanceManager  # IMPORT THE NEW MANAGER
+from finance_manager import FinanceManager
+from memory_manager import MemoryManager  # IMPORT MEMORY
 
 class CommandExecutor:
     def __init__(self):
         """Initialize command executor"""
         self.running_processes = {}
-        self.finance = FinanceManager() # INITIALIZE IT
+        self.finance = FinanceManager()
+        self.memory = MemoryManager() # INIT MEMORY
     
     def execute(self, intent):
         """
@@ -57,6 +59,14 @@ class CommandExecutor:
                 category=intent.get("category"),
                 description=intent.get("description")
             )
+            
+        # NEW: Memory Handler
+        elif action == "remember":
+            fact = intent.get("fact")
+            if fact:
+                self.memory.add_memory(fact)
+                return {"success": True, "message": f"I'll remember that: {fact}"}
+            return {"success": False, "message": "No fact provided to remember"}
             
         else:
             return {

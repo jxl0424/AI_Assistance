@@ -9,3 +9,4 @@ finance_tracker.csv
 test_*.py
 test_output.txt
 reproduce_bug.py
+verify_memory.py

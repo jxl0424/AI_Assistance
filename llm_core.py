@@ -7,6 +7,8 @@ try:
 except ImportError:
     INSTALLED_APPS = ["chrome", "notepad", "calculator"] 
 
+from memory_manager import MemoryManager
+
 class LLMCore:
     def __init__(self):
         self.client = OpenAI(
@@ -14,14 +16,20 @@ class LLMCore:
             api_key="ollama"
         )
         self.model = "llama3.2" 
+        self.memory_manager = MemoryManager()
         self.conversation_history = [
             {"role": "system", "content": self._get_system_prompt()}
         ]
 
     def _get_system_prompt(self):
         apps_str = ", ".join(INSTALLED_APPS)
+        memories = self.memory_manager.get_memory_string()
+        
         return f"""
         You are JARVIS. Output JSON only.
+        
+        USER MEMORY (Facts you know about the user):
+        {memories}
         
         AVAILABLE ACTIONS:
         1. "open": Open app (target: {apps_str})
@@ -37,18 +45,23 @@ class LLMCore:
            - Params: 
              * category (optional string, e.g. "food")
              * timeframe (enum: "today", "month", "all")
+             
+        6. "remember": Store a fact about the user.
+           - User: "My name is Brendan" or "I like coding"
+           - Params: fact (string)
         
-        6. "chat": General conversation.
+        7. "chat": General conversation.
         
         RESPONSE FORMAT:
         {{
             "response": "Spoken response to user",
             "intent": {{
-                "action": "open|system|search|track_expense|ask_finance|chat",
+                "action": "open|system|search|track_expense|ask_finance|remember|chat",
                 "target": "val", "amount": 0, "currency": "$",
                 "category": "val", "description": "val", 
                 "timeframe": "today|month|all",
-                "query": "val", "success": true
+                "query": "val", "fact": "val",
+                "success": true
             }}
         }}
         """

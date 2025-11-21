@@ -10,7 +10,7 @@ class VADDetector:
                  sample_rate=16000,
                  frame_duration=0.03,  # 30ms frames
                  energy_threshold=500,
-                 silence_duration=0.6):  # seconds of silence to stop
+                 silence_duration=1.2):  # seconds of silence to stop
         """
         Initialize VAD detector
         

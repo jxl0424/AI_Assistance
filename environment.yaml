@@ -14,10 +14,16 @@ dependencies:
     
     # Audio & Speech Recognition
     - SpeechRecognition
-    - faster-whisper    # ADDED THIS
+    - faster-whisper
     - sounddevice
     - soundfile
     - webrtcvad-wheels
+    - edge-tts
+    - pygame
+    
+    # GUI
+    - customtkinter
+    - packaging
     
     # Wake Word
     - pvporcupine

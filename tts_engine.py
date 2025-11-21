@@ -1,48 +1,82 @@
-import pyttsx3
+import edge_tts
+import pygame
+import asyncio
 import threading
-import sys
+import os
+import tempfile
+import time
 
 class TextToSpeech:
     def __init__(self):
-        self.error_logged = False
+        # Voice options: 
+        # en-GB-RyanNeural (Jarvis-like)
+        # en-US-ChristopherNeural (American male)
+        # en-US-AriaNeural (American female)
+        self.voice = "en-GB-RyanNeural" 
+        
         try:
-            # Test initialization immediately to catch errors early
-            test_engine = pyttsx3.init()
-            voices = test_engine.getProperty('voices')
-            if not voices:
-                print("⚠️ TTS Warning: No voices detected on system.")
-            del test_engine
+            pygame.mixer.init()
+            self.audio_enabled = True
         except Exception as e:
-            print(f"❌ TTS Initialization Failed: {e}")
-            self.error_logged = True
+            print(f"⚠️ Audio output not available: {e}")
+            self.audio_enabled = False
 
     def speak(self, text):
         """
-        Speaks text in a non-blocking way.
+        Speaks text using Edge TTS (Online, High Quality)
         """
-        if not text:
-            return
-
-        # Print to console so you can read it even if audio fails
+        if not text: return
+        
         print(f"\n🗣️ JARVIS: {text}\n")
         
-        if self.error_logged:
-            return
+        if not self.audio_enabled: return
 
-        # Run in a separate thread so the agent keeps listening/working
-        thread = threading.Thread(target=self._speak_thread, args=(text,))
-        thread.start()
+        # Run in separate thread to avoid blocking
+        threading.Thread(target=self._run_speak, args=(text,)).start()
 
-    def _speak_thread(self, text):
+    def _run_speak(self, text):
         try:
-            # Initialize a fresh engine instance for this thread
-            # This prevents "COM" errors on Windows
-            engine = pyttsx3.init()
+            # Create a unique temp file for this utterance to avoid conflicts
+            # timestamp to ensure uniqueness
+            filename = f"jarvis_speech_{int(time.time()*1000)}.mp3"
+            temp_file = os.path.join(tempfile.gettempdir(), filename)
             
-            # Set properties (optional)
-            engine.setProperty('rate', 160) 
+            # Generate audio (needs asyncio loop)
+            asyncio.run(self._generate_audio(text, temp_file))
             
-            engine.say(text)
-            engine.runAndWait()
+            # Play audio
+            self._play_audio(temp_file)
+            
+            # Cleanup
+            try:
+                if os.path.exists(temp_file):
+                    os.remove(temp_file)
+            except:
+                pass
+                
         except Exception as e:
-            print(f"❌ Audio Error: {e}")
+            print(f"❌ TTS Error: {e}")
+
+    async def _generate_audio(self, text, output_file):
+        communicate = edge_tts.Communicate(text, self.voice)
+        await communicate.save(output_file)
+
+    def _play_audio(self, file_path):
+        try:
+            pygame.mixer.music.load(file_path)
+            pygame.mixer.music.play()
+            
+            # Wait for playback to finish
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+                
+            pygame.mixer.music.unload()
+        except Exception as e:
+            print(f"❌ Audio Playback Error: {e}")
+
+if __name__ == "__main__":
+    # Test
+    tts = TextToSpeech()
+    tts.speak("System upgrade complete. Voice module online.")
+    # Keep main thread alive to hear audio
+    time.sleep(5)

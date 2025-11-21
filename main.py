@@ -8,11 +8,11 @@ from wake_word_detector import WakeWordDetector
 from continuous_listener import ContinuousListener
 from feedback_system import FeedbackSystem
 from llm_core import LLMCore
-from tts_engine import TextToSpeech  # IMPORT TTS
+from tts_engine import TextToSpeech
 
 class JarvisAgent:
-    def __init__(self, use_wake_word=True):
-        self.feedback = FeedbackSystem()
+    def __init__(self, use_wake_word=True, feedback_system=None):
+        self.feedback = feedback_system if feedback_system else FeedbackSystem()
         self.feedback.print_banner("JARVIS - Agent Mode")
         
         self.feedback.print_status("Init Components...", "info")
@@ -20,7 +20,7 @@ class JarvisAgent:
         self.llm = LLMCore()
         self.executor = CommandExecutor()
         self.listener = ContinuousListener()
-        self.tts = TextToSpeech()  # INIT TTS
+        self.tts = TextToSpeech()
         
         self.use_wake_word = use_wake_word
         self.wake_detector = None
@@ -83,7 +83,7 @@ class JarvisAgent:
                     if self.wake_detector.start_listening():
                         self.feedback.activation_beep()
                         self.feedback.print_status("Listening...", "listening")
-                        audio_file = self.listener.record_with_vad(max_duration=8)
+                        audio_file = self.listener.record_with_vad(max_duration=60)
                         if audio_file: self.process_command(audio_file)
                         self.feedback.print_status("Waiting...", "wake")
             except KeyboardInterrupt: pass
@@ -91,7 +91,7 @@ class JarvisAgent:
             while True:
                 input("\nPress Enter to speak...")
                 self.feedback.print_status("Listening...", "listening")
-                audio_file = self.listener.record_with_vad(max_duration=8)
+                audio_file = self.listener.record_with_vad(max_duration=60)
                 if audio_file: self.process_command(audio_file)
 
 if __name__ == "__main__":
