@@ -1,0 +1,50 @@
+name: jarvis_agent
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - portaudio
+  - pyaudio
+  - numpy
+  - pip
+  - pip:
+    # Core LLM dependency
+    - openai
+    
+    # Audio & Speech Recognition
+    - SpeechRecognition
+    - faster-whisper
+    - sounddevice
+    - soundfile
+    - webrtcvad-wheels
+    - edge-tts
+    - pygame
+    
+    # GUI
+    - customtkinter
+    - packaging
+    
+    # Wake Word
+    - pvporcupine
+    
+    # System Control
+    - pyautogui
+    - screen-brightness-control
+    - pycaw
+    - comtypes
+    - psutil
+    
+    # Web functionality
+    - requests
+    - beautifulsoup4
+    - ddgs
+    
+    # Reminder System
+    - plyer
+    - schedule
+    
+    # Stock Market
+    - yfinance
+    - matplotlib
+    - pandas
