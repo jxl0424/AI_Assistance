@@ -82,3 +82,14 @@ Thumbs.db
 
 # ChromaDB storage
 db_storage/
+
+# Demo/Example scripts
+scripts/demo_*.py
+scripts/migrate_*.py
+scripts/integrate_*.py
+scripts/run_multiagent_tests.py
+
+# User data files
+finance.db
+*.db
+data/
