@@ -1,0 +1,40 @@
+name: jarvis_agent
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - portaudio
+  - pip:
+    # Core AI
+    - openai
+    - ollama
+    
+    # Audio Processing
+    - sounddevice
+    - vosk
+    - faster-whisper
+    - edge-tts
+    - pygame
+    
+    # GUI
+    - customtkinter
+    - pillow
+    
+    # System & Utilities
+    - psutil
+    - colorama
+    - pyautogui
+    - plyer
+    
+    # RAG / Knowledge Base (New)
+    - chromadb
+    - pypdf
+    - sentence-transformers
+    - docx2txt
+    
+    # Future / Optional
+    # - spotipy  # Spotify control
+    # - phue     # Philips Hue
