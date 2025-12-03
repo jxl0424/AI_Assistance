@@ -1,12 +1,84 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-models/
-recordings/
-finance_tracker.csv
-.env
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Data
+data/finance/*.db
+data/finance/*.csv
+data/finance/*.csv.backup_*
+data/memory/memory.json
+data/reminders/reminders.json
+
+# Models
+models/
+
+# Recordings
+recordings/
+
+# Test files
 test_*.py
-test_output.txt
+*_test.py
 reproduce_bug.py
-verify_memory.py
+verify_*.py
+check_*.py
+debug_*.py
+diagnose_*.py
+
+# Temporary/Debug outputs
+*_output.txt
+*_log.txt
+*_report.txt
+*_results.txt
+demo_output.txt
+
+# Cleanup scripts
+auto_cleanup.py
+cleanup_*.py
+reorganize_*.py
+
+# Backups
+*.backup_*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+
+# ChromaDB storage
+db_storage/
