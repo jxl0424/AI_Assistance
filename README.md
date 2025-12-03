@@ -1,7 +1,7 @@
-# JARVIS - AI Voice Assistant
+**A movie (Iron Man) inspired personal project - JARVIS AI-Assistant**
 
-A professional AI voice assistant built with Python, featuring speech recognition, 
-natural language processing, and various productivity tools.
+A AI voice assistant built with Python, featuring speech recognition, 
+natural language processing, text to speech and various productivity tools.
 
 ## Features
 
@@ -14,6 +14,7 @@ natural language processing, and various productivity tools.
 - Web search and weather
 - Professional logging system
 - GUI interface
+- More to be implemented
 
 ## Project Structure
 
